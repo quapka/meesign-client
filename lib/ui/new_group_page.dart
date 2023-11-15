@@ -152,6 +152,7 @@ class _NewGroupPageState extends State<NewGroupPage> {
         _nameErr = "Enter group name";
       });
     }
+    // FIXME this should be the _minThreshold, right?
     if (_members.length < 2) {
       setState(() {
         _memberErr = "Add member";
