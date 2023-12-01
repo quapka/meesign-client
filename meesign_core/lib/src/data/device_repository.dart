@@ -48,6 +48,16 @@ class DeviceRepository {
     );
   }
 
+  /// Feth a Device starting with `name` if it exists, otherwise,
+  /// register a new Device with such name.
+  Future<Device> fetchOrRegister(String name) async {
+    var existing = (await _fetchAll())
+        .where((device) => device.name.startsWith(name))
+        .firstOrNull;
+    existing ??= await register(name);
+    return existing;
+  }
+
   /// Try to fetch devices with a name matching the query from the server.
   Future<Iterable<Device>> search(String query) async {
     // TODO: add a cache
