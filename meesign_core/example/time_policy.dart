@@ -157,5 +157,9 @@ void main(List<String> args) async {
     return ok;
   });
 
-  await database.close();
+  ProcessSignal.sigint.watch().listen((signal) {
+    print('closing db');
+    database.close();
+    exit(0);
+  });
 }
