@@ -154,6 +154,7 @@ void main(List<String> args) async {
       ChallengeRepository(dispatcher, taskSource, taskDao);
 
 
+  Device device = await deviceRepository.fetchOrRegister(userName);
 
   await groupRepository.subscribe(device.id);
   await fileRepository.subscribe(device.id);
