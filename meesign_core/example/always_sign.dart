@@ -153,6 +153,12 @@ void main(List<String> args) async {
   final challengeRepository =
       ChallengeRepository(dispatcher, taskSource, taskDao);
 
+  // TODO: Currently, the access to the databse gets significantly slower with the amount of signatures
+  //       created and processed. To overcome the limitation we periodically clean up the database for now.
+  Timer.periodic(Duration(seconds: 4), (timer) {
+    print('db cleansing');
+    taskDao.deleteFinishedTasks();
+  });
 
   Device device = await deviceRepository.fetchOrRegister(userName);
 
