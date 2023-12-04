@@ -18,6 +18,7 @@ class Device {
       : id = _randomId(),
         lastActive = DateTime.now();
 
+  // TODO: why wrap into Uuid?
   static Uuid _randomId() {
     final rnd = Random.secure();
     final bytes = List.generate(idLen, (i) => rnd.nextInt(256));
