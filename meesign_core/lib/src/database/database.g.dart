@@ -21,9 +21,10 @@ class $DevicesTable extends Devices with TableInfo<$DevicesTable, Device> {
   @override
   List<GeneratedColumn> get $columns => [id, name];
   @override
-  String get aliasedName => _alias ?? 'devices';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'devices';
+  String get actualTableName => $name;
+  static const String $name = 'devices';
   @override
   VerificationContext validateIntegrity(Insertable<Device> instance,
       {bool isInserting = false}) {
@@ -204,9 +205,10 @@ class $UsersTable extends Users with TableInfo<$UsersTable, User> {
   @override
   List<GeneratedColumn> get $columns => [id, host];
   @override
-  String get aliasedName => _alias ?? 'users';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'users';
+  String get actualTableName => $name;
+  static const String $name = 'users';
   @override
   VerificationContext validateIntegrity(Insertable<User> instance,
       {bool isInserting = false}) {
@@ -414,16 +416,13 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
   static const VerificationMeta _withCardMeta =
       const VerificationMeta('withCard');
   @override
-  late final GeneratedColumn<bool> withCard =
-      GeneratedColumn<bool>('with_card', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("with_card" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> withCard = GeneratedColumn<bool>(
+      'with_card', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("with_card" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _contextMeta =
       const VerificationMeta('context');
   @override
@@ -434,9 +433,10 @@ class $GroupsTable extends Groups with TableInfo<$GroupsTable, Group> {
   List<GeneratedColumn> get $columns =>
       [id, tid, did, name, threshold, protocol, keyType, withCard, context];
   @override
-  String get aliasedName => _alias ?? 'groups';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'groups';
+  String get actualTableName => $name;
+  static const String $name = 'groups';
   @override
   VerificationContext validateIntegrity(Insertable<Group> instance,
       {bool isInserting = false}) {
@@ -791,10 +791,12 @@ class GroupsCompanion extends UpdateCompanion<Group> {
     }
     if (protocol.present) {
       final converter = $GroupsTable.$converterprotocol;
+
       map['protocol'] = Variable<String>(converter.toSql(protocol.value));
     }
     if (keyType.present) {
       final converter = $GroupsTable.$converterkeyType;
+
       map['key_type'] = Variable<String>(converter.toSql(keyType.value));
     }
     if (withCard.present) {
@@ -859,16 +861,13 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   static const VerificationMeta _approvedMeta =
       const VerificationMeta('approved');
   @override
-  late final GeneratedColumn<bool> approved =
-      GeneratedColumn<bool>('approved', aliasedName, false,
-          type: DriftSqlType.bool,
-          requiredDuringInsert: false,
-          defaultConstraints: GeneratedColumn.constraintsDependsOnDialect({
-            SqlDialect.sqlite: 'CHECK ("approved" IN (0, 1))',
-            SqlDialect.mysql: '',
-            SqlDialect.postgres: '',
-          }),
-          defaultValue: const Constant(false));
+  late final GeneratedColumn<bool> approved = GeneratedColumn<bool>(
+      'approved', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("approved" IN (0, 1))'),
+      defaultValue: const Constant(false));
   static const VerificationMeta _roundMeta = const VerificationMeta('round');
   @override
   late final GeneratedColumn<int> round = GeneratedColumn<int>(
@@ -899,9 +898,10 @@ class $TasksTable extends Tasks with TableInfo<$TasksTable, Task> {
   List<GeneratedColumn> get $columns =>
       [id, did, gid, state, approved, round, attempt, context, data];
   @override
-  String get aliasedName => _alias ?? 'tasks';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'tasks';
+  String get actualTableName => $name;
+  static const String $name = 'tasks';
   @override
   VerificationContext validateIntegrity(Insertable<Task> instance,
       {bool isInserting = false}) {
@@ -1240,6 +1240,7 @@ class TasksCompanion extends UpdateCompanion<Task> {
     }
     if (state.present) {
       final converter = $TasksTable.$converterstate;
+
       map['state'] = Variable<String>(converter.toSql(state.value));
     }
     if (approved.present) {
@@ -1306,9 +1307,10 @@ class $GroupMembersTable extends GroupMembers
   @override
   List<GeneratedColumn> get $columns => [tid, did];
   @override
-  String get aliasedName => _alias ?? 'group_members';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'group_members';
+  String get actualTableName => $name;
+  static const String $name = 'group_members';
   @override
   VerificationContext validateIntegrity(Insertable<GroupMember> instance,
       {bool isInserting = false}) {
@@ -1493,9 +1495,10 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
   @override
   List<GeneratedColumn> get $columns => [tid, did, name];
   @override
-  String get aliasedName => _alias ?? 'files';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'files';
+  String get actualTableName => $name;
+  static const String $name = 'files';
   @override
   VerificationContext validateIntegrity(Insertable<File> instance,
       {bool isInserting = false}) {
@@ -1716,9 +1719,10 @@ class $ChallengesTable extends Challenges
   @override
   List<GeneratedColumn> get $columns => [tid, did, name, data];
   @override
-  String get aliasedName => _alias ?? 'challenges';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'challenges';
+  String get actualTableName => $name;
+  static const String $name = 'challenges';
   @override
   VerificationContext validateIntegrity(Insertable<Challenge> instance,
       {bool isInserting = false}) {
@@ -1972,9 +1976,10 @@ class $DecryptsTable extends Decrypts with TableInfo<$DecryptsTable, Decrypt> {
   @override
   List<GeneratedColumn> get $columns => [tid, did, name, data];
   @override
-  String get aliasedName => _alias ?? 'decrypts';
+  String get aliasedName => _alias ?? actualTableName;
   @override
-  String get actualTableName => 'decrypts';
+  String get actualTableName => $name;
+  static const String $name = 'decrypts';
   @override
   VerificationContext validateIntegrity(Insertable<Decrypt> instance,
       {bool isInserting = false}) {
