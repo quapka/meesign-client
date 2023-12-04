@@ -11,6 +11,7 @@ extension Range<T> on Comparable<T> {
   bool within(T a, T b) => compareTo(a) >= 0 && compareTo(b) <= 0;
 }
 
+// TODO merge with the time_policy.dart that will by default sign always?
 extension Approval<T> on TaskRepository<T> {
   StreamSubscription<Task<T>> approveAll(Device device,
       {required bool Function(Task<T>) agree}) {
@@ -152,66 +153,16 @@ void main(List<String> args) async {
   final challengeRepository =
       ChallengeRepository(dispatcher, taskSource, taskDao);
 
-  // final List<Device> devices = [];
-  // for (var devInd = 0; devInd < maxSigners; devInd++) {
-  Device device = await deviceRepository.fetchOrRegister(userName);
-  // devices.add(device);
-  // print("$devInd: ${hex.encode(device.id.bytes)}");
-  // }
 
-  // final deviceA = (await deviceRepository.search("xxxA")).first;
-//   final deviceB = (await deviceRepository.search("B")).first;
 
-//   // final deviceA = await deviceRepository.register("A");
-//   // final deviceB = await deviceRepository.register("B");
-//   // final deviceC = await deviceRepository.register("B");
-//   // print("Devices added");
-
-  // for (var devInd = 0; devInd < maxSigners; devInd++) {
-  //   print("$devInd: subscribing");
   await groupRepository.subscribe(device.id);
   await fileRepository.subscribe(device.id);
   await challengeRepository.subscribe(device.id);
-  // }
 
-  // print("creating a group");
-  // final keyType = KeyType.signChallenge;
-  // await groupRepository.group(name, devices, minSigners, protocol, keyType);
-
-  // for (var devInd = 0; devInd < maxSigners; devInd++) {
   print("$userName: approving all");
   groupRepository.approveAll(device, agree: (_) => true);
   fileRepository.approveAll(device, agree: (_) => true);
   challengeRepository.approveAll(device, agree: (_) => true);
-  // }
-
-//   await groupRepository.subscribe(deviceA.id);
-//   await fileRepository.subscribe(deviceA.id);
-//   await challengeRepository.subscribe(deviceA.id);
-
-//   await groupRepository.subscribe(deviceB.id);
-//   await fileRepository.subscribe(deviceB.id);
-//   await challengeRepository.subscribe(deviceB.id);
-
-//   // // await groupRepository.subscribe(deviceC.id);
-//   // // await fileRepository.subscribe(deviceC.id);
-//   // // await challengeRepository.subscribe(deviceC.id);
-//   // print("Both devices have subscribed");
-
-//   // final members = [deviceA, deviceB]; //, deviceC];
-//   // print("Approving group membership");
-
-//   groupRepository.approveAll(deviceA, agree: (_) => true);
-//   groupRepository.approveAll(deviceB, agree: (_) => true);
-//   // // groupRepository.approveAll(deviceC, agree: (_) => true);
-
-//   fileRepository.approveAll(deviceA, agree: (_) => true);
-//   fileRepository.approveAll(deviceB, agree: (_) => true);
-//   // // fileRepository.approveAll(deviceC, agree: (_) => true);
-
-//   challengeRepository.approveAll(deviceA, agree: (_) => true);
-//   challengeRepository.approveAll(deviceB, agree: (_) => true);
-//   // // challengeRepository.approveAll(deviceC, agree: (_) => true);
 
   // FIXME: Use locks on the tasks itself
   ProcessSignal.sigint.watch().listen((signal) {
