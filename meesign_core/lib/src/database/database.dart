@@ -34,8 +34,8 @@ class Database extends _$Database {
   Database(io.Directory dir) : super(_open(dir));
 
   static LazyDatabase _open(io.Directory dir) => LazyDatabase(() async {
-        // final file = io.File(path_pkg.join(dir.path, fileName));
-        return NativeDatabase.memory();
+        final file = io.File(path_pkg.join(dir.path, fileName));
+        return NativeDatabase.createInBackground(file);
       });
 
   @override
