@@ -49,6 +49,20 @@ class TaskDao extends DatabaseAccessor<Database> with _$TaskDaoMixin {
     return query.getSingleOrNull();
   }
 
+  Future<void> deleteFinishedTasks() async {
+    await (delete(tasks)..where((tasks) => tasks.state.equals('finished')))
+        .go();
+    final taskIds = selectOnly(tasks)..addColumns([tasks.id]);
+    await (delete(challenges)
+          ..where((challenges) => challenges.tid.isNotInQuery(taskIds)))
+        .go();
+    await (delete(files)..where((files) => files.tid.isNotInQuery(taskIds)))
+        .go();
+    await (delete(decrypts)
+          ..where((decrypts) => decrypts.tid.isNotInQuery(taskIds)))
+        .go();
+  }
+
   Future<void> upsertTask(TasksCompanion entity) {
     return into(tasks).insertOnConflictUpdate(entity);
   }
