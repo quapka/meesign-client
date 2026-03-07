@@ -22,7 +22,7 @@ flutter.buildFlutterApplication rec {
   name = "meesign-client";
   src = ./.;
 
-  # targetFlutterPlatform = "linux";
+  targetFlutterPlatform = "linux";
 
   buildInputs = [
     # TODO A likely to be refactored once Flutter does not write to it's 
