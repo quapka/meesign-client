@@ -4,6 +4,8 @@
     naersk.url = "github:nix-community/naersk";
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     fenix.url = "github:nix-community/fenix";
+    # TODO meesign-crypto-src seems to have 
+    meesign-crypto-src.url = "github:crocs-muni/meesign-crypto";
   };
 
   outputs =
@@ -13,6 +15,7 @@
       naersk,
       nixpkgs,
       fenix,
+      meesign-crypto-src,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -23,9 +26,15 @@
         };
 
         naersk' = pkgs.callPackage naersk { };
+        meesign-crypto = pkgs.callPackage meesign-crypto-src { };
+        meesign-client = pkgs.callPackage ./. { inherit meesign-crypto; };
       in
       rec {
-        defaultPackage = naersk'.buildPackage { src = ./.; };
+        packages = {
+          inherit meesign-crypto meesign-client;
+          default = meesign-client;
+          # inherit meesign-crypto;
+        };
 
         devShell = pkgs.mkShell rec {
           nativeBuildInputs = with pkgs; [
