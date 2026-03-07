@@ -45,4 +45,7 @@ flutter.buildFlutterApplication rec {
 
   autoPubspecLock = src + "/pubspec.lock";
 
+  fixupPhase = ''
+    ln -s $out/bin/meesign_client $out/bin/meesign-client
+  '';
 }
