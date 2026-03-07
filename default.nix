@@ -32,6 +32,8 @@ flutter.buildFlutterApplication rec {
     mc
   ];
 
+  flutterBuildFlags = ["--dart-define=ALLOW_BAD_CERTS=true"];
+
   # get the lib, proto and bindings?
   patchPhase = ''
     mkdir -p meesign_native/native/meesign-crypto/proto
