@@ -5,7 +5,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     fenix.url = "github:nix-community/fenix";
     # TODO meesign-crypto-src seems to have 
-    meesign-crypto-src.url = "github:crocs-muni/meesign-crypto";
+    # meesign-crypto-src.url = "github:crocs-muni/meesign-crypto";
+    meesign-crypto-src.url = "github:crocs-muni/meesign-crypto?ref=nix-wasm";
   };
 
   outputs =
@@ -26,7 +27,7 @@
         };
 
         naersk' = pkgs.callPackage naersk { };
-        meesign-crypto = pkgs.callPackage meesign-crypto-src { };
+        meesign-crypto = pkgs.callPackage meesign-crypto-src { meesign-crypto_buildWasm = true; };
         meesign-client = pkgs.callPackage ./. { inherit meesign-crypto; };
       in
       rec {
@@ -67,6 +68,7 @@
             poppler-utils
             libllvm
             libclang
+            chromium
 
             cargo
             zenity
@@ -82,6 +84,8 @@
               "rustfmt"
             ])
           ];
+
+          CHROME_EXECUTABLE = with pkgs; "${chromium.out}/bin/chromium";
           PROTOC = with pkgs; "${protobuf}/bin/protoc";
           CPATH = builtins.concatStringsSep ":" (
             with pkgs;
