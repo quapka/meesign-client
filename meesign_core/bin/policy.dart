@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:args/args.dart';
 import 'package:meesign_core/meesign_core.dart';
 import 'package:meesign_core/src/util/logger_service.dart';
+import 'package:meesign_native/meesign_native.dart';
 import 'package:meta/meta.dart';
 
 extension Range<T> on Comparable<T> {
@@ -175,6 +176,8 @@ bool? evalPolicy<T>(
 }
 
 void main(List<String> args) async {
+  await createCryptoInstance();
+
   final parser = ArgParser()
     ..addFlag(
       'help',
