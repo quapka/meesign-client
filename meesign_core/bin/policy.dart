@@ -166,12 +166,25 @@ bool? evalPolicy<T>(
     LoggerService.logWarning('Error parsing after: $e');
   }
 
+  final even = policy['even-minute'] as bool? ?? false;
+  final odd = policy['odd-minute'] as bool? ?? false;
+
+  final currentMinute = Time.now().minute;
+  if (even) {
+    result = result && (currentMinute.isEven);
+  }
+  if (odd) {
+    result = result && (currentMinute.isOdd);
+  }
+
   if (result) {
     return true;
   }
+
   if (policy['decline'] as bool? ?? false) {
     return false;
   }
+
   return null;
 }
 
@@ -182,16 +195,17 @@ void main(List<String> args) async {
     ..addFlag(
       'help',
       abbr: 'h',
-      help: 'display usage information',
+      help: 'Display usage information',
       negatable: false,
     )
     ..addOption(
       'host',
-      help: 'address of the server',
+      help: 'The hostname of the server to connect to.',
       defaultsTo: 'localhost',
     )
-    ..addOption('name', help: 'name of the user', defaultsTo: 'PolicyBot')
-    ..addOption('policy', help: 'path to the policy file');
+    ..addOption('name',
+        help: 'The name of the user, which uniquely identifies this bot.')
+    ..addOption('policy', help: 'Path to the policy file');
 
   late final ArgResults options;
 
@@ -219,7 +233,7 @@ void main(List<String> args) async {
     }
   }
 
-  final appDir = Directory('app/');
+  final appDir = Directory("app/${options['name']}");
 
   final database = Database(openDatabaseConnection(appDir.path));
   final userDao = database.userDao;
