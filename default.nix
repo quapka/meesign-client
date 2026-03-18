@@ -11,6 +11,8 @@ flutter.buildFlutterApplication rec {
   name = "meesign-client";
   src = ./.;
 
+  flutterMode = "release";
+
   targetFlutterPlatform = "web";
 
   buildInputs = [
